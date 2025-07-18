@@ -49,39 +49,53 @@ export default function CampaignPage() {
 
   // Bandit SDK initialization
   useEffect(() => {
+    // Clear any existing Bandit instances
+    if ((window as any).Bandit) {
+      delete (window as any).Bandit;
+    }
+    
     const script = document.createElement("script")
     script.src = "https://cdn.bandit.network/sdk/bandit.js"
+    script.async = true
+    script.defer = true
 
     script.onload = () => {
-      if (window.Bandit) {
-        try {
-          const bandit = new window.Bandit.init({
-            apiKey: "2427fb97559643739546603fdf78590c",
-            cluster: "mainnet",
-          })
+      // Wait a bit for the script to fully initialize
+      setTimeout(() => {
+        if (window.Bandit) {
+          try {
+            const bandit = new window.Bandit.init({
+              apiKey: "2427fb97559643739546603fdf78590c",
+              cluster: "mainnet",
+            })
 
-          bandit.mountCampaign({ campaignId: 6902 }, "bandit-campaign")
-          setIsLoading(false)
-          
-          // Game-like progression simulation
-          setTimeout(() => {
-            setScore(1250)
-            setXP(75)
-            setAchievements(['first_farm', 'early_adopter'])
+            bandit.mountCampaign({ campaignId: 6902 }, "bandit-campaign")
+            setIsLoading(false)
             
-            // Play level up sound
-            if ((window as any).gameSounds) {
-              (window as any).gameSounds.levelUp()
-            }
-          }, 2000)
-        } catch (error) {
-          console.error("Bandit error:", error)
+            // Game-like progression simulation
+            setTimeout(() => {
+              setScore(1250)
+              setXP(75)
+              setAchievements(['first_farm', 'early_adopter'])
+              
+              // Play level up sound
+              if ((window as any).gameSounds) {
+                (window as any).gameSounds.levelUp()
+              }
+            }, 3000)
+          } catch (error) {
+            console.error("Bandit initialization error:", error)
+            setIsLoading(false)
+          }
+        } else {
+          console.error("Bandit SDK not loaded properly")
           setIsLoading(false)
         }
-      }
+      }, 500)
     }
 
-    script.onerror = () => {
+    script.onerror = (error) => {
+      console.error("Failed to load Bandit SDK:", error)
       setIsLoading(false)
     }
 
@@ -287,46 +301,44 @@ export default function CampaignPage() {
         }
         
         #bandit-campaign {
-          font-family: 'Rajdhani', sans-serif;
+          font-family: inherit;
+          background: white !important;
         }
         
-        #bandit-campaign button {
-          font-family: 'Rajdhani', sans-serif;
-          font-weight: 700;
-          letter-spacing: 0.05em;
-          background: linear-gradient(135deg, #8b5cf6, #ec4899);
-          border: 2px solid transparent;
-          border-radius: 8px;
-          color: white;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          font-size: 16px;
-          padding: 16px 32px;
-          position: relative;
-          overflow: hidden;
+        /* Allow Bandit widget to style itself - minimal interference */
+        #bandit-campaign * {
+          font-family: inherit !important;
         }
         
-        #bandit-campaign button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-          transition: left 0.5s ease;
+        /* Only style specific button types that won't interfere with wallet connections */
+        #bandit-campaign button[type="submit"]:not([class*="wallet"]):not([class*="connect"]) {
+          background: linear-gradient(135deg, #8b5cf6, #ec4899) !important;
+          border-radius: 8px !important;
+          color: white !important;
+          transition: all 0.3s ease !important;
+          font-weight: 600 !important;
+          padding: 12px 24px !important;
         }
         
-        #bandit-campaign button:hover {
-          background: linear-gradient(135deg, #7c3aed, #db2777);
-          transform: translateY(-2px);
-          box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
-          border-color: rgba(139, 92, 246, 0.5);
-        }
-        
-        #bandit-campaign button:hover::before {
-          left: 100%;
-        }
+                 #bandit-campaign button[type="submit"]:not([class*="wallet"]):not([class*="connect"]):hover {
+           background: linear-gradient(135deg, #7c3aed, #db2777) !important;
+           transform: translateY(-1px) !important;
+           box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3) !important;
+         }
+         
+         /* Ensure wallet modals and overlays appear above all game elements */
+         [data-testid*="wallet"], [class*="wallet"], [class*="modal"], [role="dialog"] {
+           z-index: 9999 !important;
+         }
+         
+         /* Ensure Bandit's own modals work properly */
+         #bandit-campaign [role="dialog"], 
+         #bandit-campaign .modal,
+         #bandit-campaign [class*="overlay"],
+         #bandit-campaign [class*="popup"] {
+           z-index: 9999 !important;
+           position: fixed !important;
+         }
       `}</style>
 
       {/* Animated Particles */}
@@ -349,7 +361,7 @@ export default function CampaignPage() {
 
       <div className="relative z-10">
         {/* Game HUD */}
-        <div className="fixed top-4 right-4 z-50 space-y-2">
+        <div className="fixed top-4 right-4 z-40 space-y-2">
           <div className="game-card bg-black/90 backdrop-blur-md p-4 rounded-lg glow-effect">
             <div className="flex items-center space-x-4 text-white">
               <div className="flex items-center space-x-2">
@@ -563,7 +575,7 @@ export default function CampaignPage() {
                 </div>
 
                 {/* Main Gaming Portal */}
-                <div className="game-card bg-gradient-to-br from-black/95 via-purple-900/30 to-black/95 backdrop-blur-sm p-8 glow-effect border-2 border-purple-400/50 relative overflow-hidden">
+                <div className="game-card bg-gradient-to-br from-black/95 via-purple-900/30 to-black/95 backdrop-blur-sm p-8 glow-effect border-2 border-purple-400/50 relative">
                   {/* Animated background elements */}
                   <div className="absolute inset-0 opacity-20">
                     <div className="absolute top-0 left-0 w-32 h-32 bg-purple-500 rounded-full blur-3xl animate-pulse"></div>
@@ -587,12 +599,15 @@ export default function CampaignPage() {
                         </div>
                       </div>
                       
-                      {/* The actual Bandit campaign container with enhanced styling */}
+                      {/* The actual Bandit campaign container - simplified for compatibility */}
                       <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-transparent to-pink-500/20 rounded-lg pointer-events-none"></div>
-                        <div id="bandit-campaign" className="min-h-[600px] rounded-lg relative z-10 border-2 border-purple-300/30 bg-gradient-to-br from-white/95 to-purple-50/95" />
+                        {/* Subtle background enhancement that won't interfere */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-pink-500/5 rounded-lg pointer-events-none"></div>
                         
-                        {/* Loading overlay */}
+                        {/* Clean container for Bandit widget */}
+                        <div id="bandit-campaign" className="min-h-[600px] rounded-lg relative z-10 bg-white border border-purple-200/50" />
+                        
+                        {/* Loading overlay - only shows when loading */}
                         {isLoading && (
                           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm rounded-lg flex items-center justify-center z-20">
                             <div className="text-center">
