@@ -86,7 +86,11 @@ export default function CampaignPage() {
     }
 
     document.head.appendChild(script)
-    return () => document.head.removeChild(script)
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script)
+      }
+    }
   }, [])
 
   // Level calculation
