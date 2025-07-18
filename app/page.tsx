@@ -327,16 +327,44 @@ export default function CampaignPage() {
          }
          
          /* Ensure wallet modals and overlays appear above all game elements */
-         [data-testid*="wallet"], [class*="wallet"], [class*="modal"], [role="dialog"] {
-           z-index: 9999 !important;
+         [data-testid*="wallet"], 
+         [class*="wallet"], 
+         [class*="modal"], 
+         [role="dialog"],
+         [class*="connect"],
+         [id*="wallet"],
+         [id*="modal"],
+         .modal,
+         .overlay,
+         .popup,
+         [data-reach-dialog-overlay],
+         [data-reach-dialog-content] {
+           z-index: 99999 !important;
+           position: fixed !important;
          }
          
          /* Ensure Bandit's own modals work properly */
          #bandit-campaign [role="dialog"], 
          #bandit-campaign .modal,
          #bandit-campaign [class*="overlay"],
-         #bandit-campaign [class*="popup"] {
-           z-index: 9999 !important;
+         #bandit-campaign [class*="popup"],
+         #bandit-campaign [class*="wallet"],
+         #bandit-campaign [class*="connect"],
+         #bandit-campaign [data-testid*="wallet"],
+         #bandit-campaign [data-reach-dialog-overlay],
+         #bandit-campaign [data-reach-dialog-content] {
+           z-index: 99999 !important;
+           position: fixed !important;
+         }
+         
+         /* Specific overrides for common wallet modal selectors */
+         .wallet-adapter-modal,
+         .wallet-adapter-modal-overlay,
+         .solana-wallet-modal,
+         .phantom-modal,
+         .coinbase-modal,
+         .metamask-modal {
+           z-index: 99999 !important;
            position: fixed !important;
          }
       `}</style>
@@ -359,9 +387,9 @@ export default function CampaignPage() {
       <div className="absolute inset-0 neon-grid" />
       <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/30 to-black/60" />
 
-      <div className="relative z-10">
+      <div className="relative z-10" style={{zIndex: 10}}>
         {/* Game HUD */}
-        <div className="fixed top-4 right-4 z-40 space-y-2">
+        <div className="fixed top-4 right-4 space-y-2" style={{zIndex: 30}}>
           <div className="game-card bg-black/90 backdrop-blur-md p-4 rounded-lg glow-effect">
             <div className="flex items-center space-x-4 text-white">
               <div className="flex items-center space-x-2">

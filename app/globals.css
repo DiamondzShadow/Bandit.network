@@ -35,6 +35,27 @@ button, .game-card {
   background: linear-gradient(180deg, #7c3aed, #db2777);
 }
 
+/* Force all wallet modals to appear above game elements */
+[role="dialog"],
+[aria-modal="true"],
+.modal,
+.overlay,
+[class*="modal"],
+[class*="wallet"],
+[class*="connect"],
+[data-testid*="wallet"],
+[data-reach-dialog-overlay],
+[data-reach-dialog-content] {
+  z-index: 99999 !important;
+}
+
+/* Ensure modals are properly positioned */
+[role="dialog"][style*="position"],
+[aria-modal="true"][style*="position"] {
+  position: fixed !important;
+  z-index: 99999 !important;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
