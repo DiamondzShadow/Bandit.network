@@ -115,6 +115,24 @@ export default function CampaignPage() {
     }
   }
 
+  const handleQuickStart = () => {
+    setScore(prev => prev + 100)
+    setXP(prev => prev + 25)
+    
+    if ((window as any).gameSounds) {
+      (window as any).gameSounds.powerUp()
+    }
+  }
+
+  const handlePowerBoost = () => {
+    setScore(prev => prev + 200)
+    setXP(prev => prev + 50)
+    
+    if ((window as any).gameSounds) {
+      (window as any).gameSounds.levelUp()
+    }
+  }
+
   return (
     <div
       className="min-h-screen relative overflow-hidden"
@@ -496,91 +514,252 @@ export default function CampaignPage() {
           </div>
         </div>
 
-        {/* Enhanced Campaign Widget Section */}
+        {/* Epic Gaming Portal Section */}
         <div className="px-8 pb-16">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-12 gap-8">
               <div className="col-span-12 lg:col-span-8">
-                <div className="game-card bg-white/98 backdrop-blur-sm p-12 glow-effect">
-                  <div className="flex items-center justify-between mb-8">
+                {/* Gaming Portal Header */}
+                <div className="game-card bg-gradient-to-br from-purple-900/95 via-pink-900/95 to-purple-900/95 backdrop-blur-sm p-8 mb-6 glow-effect border-2 border-purple-400/50">
+                  <div className="flex items-center justify-between mb-6">
                     <div>
-                      <div className="game-accent text-purple-600 text-xs mb-2 flex items-center">
-                        <Gamepad2 className="w-4 h-4 mr-2" />
-                        GAMING PORTAL
+                      <div className="game-accent text-cyan-400 text-xs mb-2 flex items-center">
+                        <Gamepad2 className="w-4 h-4 mr-2 animate-pulse" />
+                        <span className="animate-pulse">◉ LIVE</span>
+                        <Sparkles className="w-4 h-4 ml-2 animate-spin" />
+                        BATTLE PORTAL
                       </div>
-                      <h2 className="game-title text-4xl text-gray-900">Enter the Arena</h2>
+                      <h2 className="game-title text-4xl text-white mb-2">⚔️ ENTER THE ARENA ⚔️</h2>
+                      <div className="text-purple-300 text-sm game-body">
+                        Prepare for epic battles • Legendary rewards await • Maximum glory
+                      </div>
                     </div>
                     {isLoading && (
-                      <div className="flex items-center text-purple-600 game-body">
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-purple-600 mr-3"></div>
-                        Loading Battle System...
+                      <div className="flex items-center text-cyan-400 game-body">
+                        <div className="w-6 h-6 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mr-3"></div>
+                        <div className="text-right">
+                          <div className="text-xs">INITIALIZING</div>
+                          <div className="text-xs text-cyan-300">BATTLE SYSTEMS...</div>
+                        </div>
                       </div>
                     )}
                   </div>
+                  
+                  {/* Battle Stats Row */}
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="text-center p-3 bg-black/40 rounded-lg border border-purple-400/30">
+                      <div className="text-yellow-400 text-lg font-bold">2,847</div>
+                      <div className="text-xs text-white/60">ACTIVE WARRIORS</div>
+                    </div>
+                    <div className="text-center p-3 bg-black/40 rounded-lg border border-purple-400/30">
+                      <div className="text-green-400 text-lg font-bold">$50,000</div>
+                      <div className="text-xs text-white/60">PRIZE POOL</div>
+                    </div>
+                    <div className="text-center p-3 bg-black/40 rounded-lg border border-purple-400/30">
+                      <div className="text-red-400 text-lg font-bold animate-pulse">47:23:15</div>
+                      <div className="text-xs text-white/60">TIME REMAINING</div>
+                    </div>
+                  </div>
+                </div>
 
-                  <div id="bandit-campaign" className="min-h-[600px] rounded-lg overflow-hidden border-2 border-purple-200" />
+                {/* Main Gaming Portal */}
+                <div className="game-card bg-gradient-to-br from-black/95 via-purple-900/30 to-black/95 backdrop-blur-sm p-8 glow-effect border-2 border-purple-400/50 relative overflow-hidden">
+                  {/* Animated background elements */}
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="absolute top-0 left-0 w-32 h-32 bg-purple-500 rounded-full blur-3xl animate-pulse"></div>
+                    <div className="absolute bottom-0 right-0 w-40 h-40 bg-pink-500 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+                    <div className="absolute top-1/2 left-1/2 w-36 h-36 bg-cyan-500 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+                  </div>
+                  
+                  {/* Portal Frame */}
+                  <div className="relative z-10">
+                    <div className="border-4 border-purple-400/50 rounded-xl p-6 bg-gradient-to-br from-purple-900/20 to-pink-900/20 backdrop-blur-sm">
+                      {/* Gaming HUD overlay */}
+                      <div className="flex items-center justify-between mb-4 p-4 bg-black/60 rounded-lg border border-cyan-400/30">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                          <span className="text-green-400 text-sm font-bold">PORTAL ACTIVE</span>
+                          <div className="text-cyan-400 text-xs">| SECURITY: MAXIMUM |</div>
+                        </div>
+                        <div className="flex items-center space-x-2 text-purple-300 text-xs">
+                          <Zap className="w-4 h-4 text-yellow-400 animate-pulse" />
+                          <span>ENERGY: 100%</span>
+                        </div>
+                      </div>
+                      
+                      {/* The actual Bandit campaign container with enhanced styling */}
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-transparent to-pink-500/20 rounded-lg pointer-events-none"></div>
+                        <div id="bandit-campaign" className="min-h-[600px] rounded-lg relative z-10 border-2 border-purple-300/30 bg-gradient-to-br from-white/95 to-purple-50/95" />
+                        
+                        {/* Loading overlay */}
+                        {isLoading && (
+                          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm rounded-lg flex items-center justify-center z-20">
+                            <div className="text-center">
+                              <div className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                              <div className="text-purple-300 text-lg font-bold mb-2">ENTERING THE ARENA</div>
+                              <div className="text-purple-400 text-sm">Preparing battle systems...</div>
+                              <div className="flex justify-center mt-4 space-x-1">
+                                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Gaming controls bar */}
+                      <div className="mt-4 p-4 bg-black/60 rounded-lg border border-purple-400/30">
+                        <div className="flex items-center justify-between">
+                                                     <div className="flex items-center space-x-4">
+                             <button 
+                               onClick={handleQuickStart}
+                               className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg text-sm font-bold hover:from-purple-700 hover:to-pink-700 transition-all hover:scale-105 active:scale-95"
+                             >
+                               🎮 QUICK START
+                             </button>
+                             <button 
+                               onClick={handlePowerBoost}
+                               className="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg text-sm font-bold hover:from-green-700 hover:to-emerald-700 transition-all hover:scale-105 active:scale-95"
+                             >
+                               ⚡ POWER BOOST
+                             </button>
+                           </div>
+                          <div className="flex items-center space-x-2 text-cyan-400 text-xs">
+                            <Target className="w-4 h-4" />
+                            <span>AUTO-TARGET: ON</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="col-span-12 lg:col-span-4 space-y-8">
-                <div className="game-card bg-black/90 backdrop-blur-sm p-8 text-white glow-effect">
-                  <div className="game-accent text-purple-400 text-xs mb-4 flex items-center">
-                    <Trophy className="w-4 h-4 mr-2" />
-                    MISSION BRIEFING
-                  </div>
-                  <div className="space-y-6">
-                    <div>
-                      <div className="game-body text-white/60 text-sm mb-1">Prize Pool</div>
-                      <div className="game-title text-2xl text-yellow-400">$50,000 $zLAB</div>
+              <div className="col-span-12 lg:col-span-4 space-y-6">
+                {/* Enhanced Mission Briefing */}
+                <div className="game-card bg-gradient-to-br from-black/95 via-purple-900/50 to-black/95 backdrop-blur-sm p-8 text-white glow-effect border-2 border-purple-400/50 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-purple-500 rounded-full blur-2xl opacity-30 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="game-accent text-purple-400 text-xs mb-4 flex items-center">
+                      <Trophy className="w-4 h-4 mr-2 animate-bounce" />
+                      🎯 MISSION BRIEFING
                     </div>
-                    <div>
-                      <div className="game-body text-white/60 text-sm mb-1">Battle Duration</div>
-                      <div className="game-title text-2xl text-red-400">Limited Time</div>
-                    </div>
-                    <div>
-                      <div className="game-body text-white/60 text-sm mb-1">Battlefield</div>
-                      <div className="game-title text-2xl text-cyan-400">Diamond ZChain</div>
-                    </div>
-                    <div>
-                      <div className="game-body text-white/60 text-sm mb-1">Active Players</div>
-                      <div className="game-title text-2xl text-green-400">2,847</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="game-card bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-sm border-2 border-purple-400/30 p-8 glow-effect">
-                  <div className="game-accent text-white text-xs mb-4 flex items-center">
-                    <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
-                    POWERED BY
-                  </div>
-                  <div className="game-title text-white text-xl mb-4">Bandit Gaming Network</div>
-                  <div className="game-body text-white/80 text-sm">
-                    Next-generation gaming infrastructure for DeFi warriors and legendary farmers.
-                  </div>
-                </div>
-
-                {/* Leaderboard Preview */}
-                <div className="game-card bg-gradient-to-br from-yellow-500/10 to-orange-500/10 backdrop-blur-sm border-2 border-yellow-400/30 p-8">
-                  <div className="game-accent text-yellow-400 text-xs mb-4 flex items-center">
-                    <Star className="w-4 h-4 mr-2" />
-                    TOP FARMERS
-                  </div>
-                  <div className="space-y-3">
-                    {[1, 2, 3].map((rank) => (
-                      <div key={rank} className="flex items-center justify-between text-white">
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                            rank === 1 ? 'bg-yellow-400 text-black' : 
-                            rank === 2 ? 'bg-gray-300 text-black' : 
-                            'bg-orange-400 text-black'
-                          }`}>
-                            {rank}
-                          </div>
-                          <span className="text-sm">Player #{1000 + rank}</span>
+                    <div className="space-y-6">
+                      <div className="p-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-lg border border-yellow-400/30">
+                        <div className="game-body text-yellow-300 text-sm mb-1 flex items-center">
+                          <Coins className="w-4 h-4 mr-2" />
+                          Prize Pool
                         </div>
-                        <span className="text-sm font-bold">{(5000 - rank * 500).toLocaleString()} pts</span>
+                        <div className="game-title text-2xl text-yellow-400 animate-pulse">$50,000 $zLAB</div>
+                        <div className="w-full bg-yellow-900/30 rounded-full h-2 mt-2">
+                          <div className="progress-bar h-2" style={{ width: '67%' }} />
+                        </div>
                       </div>
-                    ))}
+                      <div className="p-4 bg-gradient-to-r from-red-500/20 to-pink-500/20 rounded-lg border border-red-400/30">
+                        <div className="game-body text-red-300 text-sm mb-1 flex items-center">
+                          ⏱️ Battle Duration
+                        </div>
+                        <div className="game-title text-2xl text-red-400 animate-pulse">47:23:15</div>
+                        <div className="text-xs text-red-300 mt-1">⚡ URGENT DEPLOYMENT</div>
+                      </div>
+                      <div className="p-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg border border-cyan-400/30">
+                        <div className="game-body text-cyan-300 text-sm mb-1 flex items-center">
+                          🌐 Battlefield
+                        </div>
+                        <div className="game-title text-2xl text-cyan-400">Diamond ZChain</div>
+                        <div className="flex items-center mt-2">
+                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
+                          <span className="text-xs text-cyan-300">NETWORK STABLE</span>
+                        </div>
+                      </div>
+                      <div className="p-4 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-lg border border-green-400/30">
+                        <div className="game-body text-green-300 text-sm mb-1 flex items-center">
+                          👥 Active Warriors
+                        </div>
+                        <div className="game-title text-2xl text-green-400">2,847</div>
+                        <div className="text-xs text-green-300 mt-1">📈 +127 in last hour</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Enhanced Leaderboard */}
+                <div className="game-card bg-gradient-to-br from-yellow-900/30 to-orange-900/30 backdrop-blur-sm border-2 border-yellow-400/50 p-8 glow-effect relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-16 h-16 bg-yellow-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="game-accent text-yellow-400 text-xs mb-6 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Star className="w-4 h-4 mr-2 animate-spin" />
+                        🏆 HALL OF LEGENDS
+                      </div>
+                      <div className="text-yellow-300 text-xs animate-pulse">LIVE</div>
+                    </div>
+                    <div className="space-y-4">
+                      {[
+                        { rank: 1, name: "CryptoKing", points: 4500, badge: "👑", color: "from-yellow-400 to-yellow-600" },
+                        { rank: 2, name: "DeFiMaster", points: 4000, badge: "🥈", color: "from-gray-300 to-gray-500" },
+                        { rank: 3, name: "BlockWarrior", points: 3500, badge: "🥉", color: "from-orange-400 to-orange-600" }
+                      ].map((player) => (
+                        <div key={player.rank} className="p-3 bg-black/60 rounded-lg border border-yellow-400/20 hover:border-yellow-400/50 transition-all hover:scale-102">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-8 h-8 rounded-full bg-gradient-to-r ${player.color} flex items-center justify-center text-sm font-bold text-white shadow-lg`}>
+                                {player.badge}
+                              </div>
+                              <div>
+                                <div className="text-white font-bold text-sm">{player.name}</div>
+                                <div className="text-yellow-300 text-xs">Level {10 + player.rank}</div>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-yellow-400 font-bold text-sm">{player.points.toLocaleString()}</div>
+                              <div className="text-yellow-300 text-xs">pts</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="text-center pt-2">
+                        <button className="px-4 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-lg text-xs font-bold hover:from-yellow-700 hover:to-orange-700 transition-all hover:scale-105">
+                          🚀 VIEW FULL LEADERBOARD
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Enhanced Power-up System */}
+                <div className="game-card bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-sm border-2 border-purple-400/30 p-8 glow-effect relative overflow-hidden">
+                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-pink-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
+                  <div className="relative z-10">
+                    <div className="game-accent text-white text-xs mb-4 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
+                        ⚡ POWER SYSTEMS
+                      </div>
+                      <div className="text-purple-300 text-xs">ONLINE</div>
+                    </div>
+                    <div className="game-title text-white text-xl mb-4">Bandit Gaming Network</div>
+                    <div className="game-body text-white/80 text-sm mb-6">
+                      Next-generation gaming infrastructure for DeFi warriors and legendary farmers.
+                    </div>
+                    
+                    {/* Power-up buttons */}
+                    <div className="space-y-3">
+                      <button className="w-full p-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg text-sm font-bold hover:from-purple-700 hover:to-purple-800 transition-all hover:scale-105 flex items-center justify-between">
+                        <span>🚀 SPEED BOOST</span>
+                        <span className="text-xs text-purple-200">2x Multiplier</span>
+                      </button>
+                      <button className="w-full p-3 bg-gradient-to-r from-pink-600 to-pink-700 text-white rounded-lg text-sm font-bold hover:from-pink-700 hover:to-pink-800 transition-all hover:scale-105 flex items-center justify-between">
+                        <span>💰 GOLD RUSH</span>
+                        <span className="text-xs text-pink-200">5min Duration</span>
+                      </button>
+                      <button className="w-full p-3 bg-gradient-to-r from-cyan-600 to-cyan-700 text-white rounded-lg text-sm font-bold hover:from-cyan-700 hover:to-cyan-800 transition-all hover:scale-105 flex items-center justify-between">
+                        <span>🛡️ SHIELD MODE</span>
+                        <span className="text-xs text-cyan-200">Protection</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
